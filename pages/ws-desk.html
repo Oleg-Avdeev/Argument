@@ -1,0 +1,53 @@
+<html>
+
+    <meta charset="utf-8" />
+    <title>WS Test</title>
+    <script src="/pages/ws-tools.js"></script>
+    
+    <style>
+        div.main-region {
+            text-align: center;
+            width: 50%;
+            margin-left: 25%;
+            margin-right: 25%;
+            margin-top: 25%;
+            margin-bottom: 25%;
+        }
+    </style>
+
+<body onload="initialize()">
+<div class="main-region">
+    <h2>Send-recieve desk test</h2>
+    
+    <button onclick="connect()">Connect</button>
+    <button onclick="disconnect()">Disconnect</button>
+    
+    <div id="desk" style="display: none;">
+        <p>
+            <button id="desk-p1-0" onclick="boop(0, 0)">O</button>
+            <button id="desk-p1-1" onclick="boop(0, 1)">O</button>
+            <button id="desk-p1-2" onclick="boop(0, 2)">O</button>
+            <button id="desk-p1-3" onclick="boop(0, 3)">O</button>
+            <button id="desk-p1-4" onclick="boop(0, 4)">O</button>
+            <button id="desk-p1-5" onclick="boop(0, 5)">O</button>
+            <button id="desk-p1-6" onclick="boop(0, 6)">O</button>
+            <button id="desk-p1-7" onclick="boop(0, 7)">O</button>
+        </p>
+        <p>
+            <button id="desk-p2-0" onclick="boop(1, 0)">O</button>
+            <button id="desk-p2-1" onclick="boop(1, 1)">O</button>
+            <button id="desk-p2-2" onclick="boop(1, 2)">O</button>
+            <button id="desk-p2-3" onclick="boop(1, 3)">O</button>
+            <button id="desk-p2-4" onclick="boop(1, 4)">O</button>
+            <button id="desk-p2-5" onclick="boop(1, 5)">O</button>
+            <button id="desk-p2-6" onclick="boop(1, 6)">O</button>
+            <button id="desk-p2-7" onclick="boop(1, 7)">O</button>
+        </p>
+    </div>
+    
+    <div id="output"></div>
+
+</div>
+</body>
+</html>
+        
