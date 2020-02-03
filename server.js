@@ -1,8 +1,7 @@
-/*server.js*/
 var port = 8000;
 var serverUrl = "127.0.0.1";
 
-var WebSocket = require('ws')
+var desk = require("./modules/deskmanager");
 var http = require("http");
 var path = require("path");
 var fs = require("fs");
@@ -42,6 +41,7 @@ http.createServer(function (req, res) {
             if (exists) {
                 console.log("Serving file: " + localPath);
                 getFile(localPath, res, mimeType);
+                desk.runDesk(0, 0);
             } else {
                 console.log("File not found: " + localPath);
                 res.writeHead(404);
@@ -54,6 +54,7 @@ http.createServer(function (req, res) {
     }
 }).listen(port, serverUrl);
 
+
 function getFile(localPath, res, mimeType) {
     fs.readFile(localPath, function (err, contents) {
         if (!err) {
@@ -63,53 +64,9 @@ function getFile(localPath, res, mimeType) {
             }
             res.statusCode = 200;
             res.end(contents);
-            initializeWS();
         } else {
             res.writeHead(500);
             res.end();
         }
     });
 }
-
-var boop_array = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-
-function initializeWS() {
-    
-    const wss = new WebSocket.Server({ port: 8088 })
-    
-    wss.on('connection', ws => {
-    
-        ws.on('message', message => {
-            console.log(`Received message => ${message}`)
-            
-            var data = JSON.parse(message);
-            if (data[0]=='boop')
-            {
-                var index = data[1]*8 + data[2];
-                updateBoop(index);
-                broadcastBoops(wss, 'update');
-            }
-        })
-        
-        var connection_data = ['connection', boop_array];
-        ws.send(JSON.stringify(connection_data));
-    });
-    
-    wss.on('error', message => {
-        console.log(`Error occured => ${message}`)
-    })
-}
-
-function broadcastBoops(wss, event) {
-    var boop_info = JSON.stringify([event, boop_array]);
-    wss.clients.forEach(function each(client) {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(boop_info);
-        }
-    });
-}
-
-function updateBoop(index) {
-    boop_array[index] = (boop_array[index] + 1) % 3;
-}
-
