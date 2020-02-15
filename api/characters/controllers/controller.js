@@ -1,24 +1,24 @@
 var mongoose = require('mongoose'),
-    users = mongoose.model('users');
+    model = mongoose.model('character');
 
 exports.list = function (req, res) {
-    users.find({}, handler(res));
+    model.find({}, handler(res));
 }
 
 exports.create = function (req, res) {
-    (new users(req.body)).save(handler(res));
+    (new model(req.body)).save(handler(res));
 }
 
 exports.get = function (req, res) {
-    users.findById(req.params.userId, handler(res));
+    model.findById(req.params.id, handler(res));
 }
 
 exports.update = function (req, res) {
-    users.findByIdAndUpdate(req.params.userId, req.body, handler(res));
+    model.findByIdAndUpdate(req.params.id, req.body, handler(res));
 }
 
 exports.delete = function (req, res) {
-    users.findOneAndDelete(req.params.userId, handler(res));
+    model.findOneAndDelete(req.params.id, handler(res));
 }
 
 
