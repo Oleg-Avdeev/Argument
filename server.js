@@ -1,72 +1,32 @@
-var port = 8000;
-var serverUrl = "127.0.0.1";
+var WebSocket = require("ws");
+var Desk = require("desk");
+var port = 5000;
 
-var desk = require("./modules/deskmanager");
-var http = require("http");
-var path = require("path");
-var fs = require("fs");
+const wss = new WebSocket.Server({ port: port });
+wss.on('connection', socket => { socket.on('message', onMessage); });
+wss.on('error', message => { console.log(`Error occured => ${message}`); });
 
-var checkMimeType = true;
+function onMessage(message) {
+    console.log(`Received message => ${message}`)
+    
+    var data = JSON.parse(message);
+    
+    if (data["request"] === 'connect')
+    {
 
-console.log("Starting web server at " + serverUrl + ":" + port);
-
-http.createServer(function (req, res) {
-
-    var now = new Date();
-
-    var filename = req.url || "pages/ws-desk.html";
-    var ext = path.extname(filename);
-    var localPath = __dirname;
-    var validExtensions = {
-        ".html": "text/html",
-        ".js": "application/javascript",
-        ".css": "text/css",
-        ".txt": "text/plain",
-        ".jpg": "image/jpeg",
-        ".gif": "image/gif",
-        ".png": "image/png",
-        ".woff": "application/font-woff",
-        ".woff2": "application/font-woff2"
-    };
-
-    var validMimeType = true;
-    var mimeType = validExtensions[ext];
-    if (checkMimeType) {
-        validMimeType = validExtensions[ext] != undefined;
     }
 
-    if (validMimeType) {
-        localPath += filename;
-        fs.exists(localPath, function (exists) {
-            if (exists) {
-                console.log("Serving file: " + localPath);
-                getFile(localPath, res, mimeType);
-                desk.runDesk(0, 0);
-            } else {
-                console.log("File not found: " + localPath);
-                res.writeHead(404);
-                res.end();
-            }
-        });
-
-    } else {
-        console.log("Invalid file extension detected: " + ext + " (" + filename + ")")
+    if (data["request"]=='use-argument')
+    {
+        updateDesk(data[1], data[2], data[3]);
+        broadcastState(wss);
     }
-}).listen(port, serverUrl);
+}
 
-
-function getFile(localPath, res, mimeType) {
-    fs.readFile(localPath, function (err, contents) {
-        if (!err) {
-            res.setHeader("Content-Length", contents.length);
-            if (mimeType != undefined) {
-                res.setHeader("Content-Type", mimeType);
-            }
-            res.statusCode = 200;
-            res.end(contents);
-        } else {
-            res.writeHead(500);
-            res.end();
+function broadcastState(wss) {
+    wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(getDeskState());
         }
     });
 }
