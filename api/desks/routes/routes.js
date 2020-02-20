@@ -9,4 +9,8 @@ module.exports = function (app) {
         .get(controller.get)
         .put(controller.update)
         .delete(controller.delete);
+
+    app.route('/desks/:id/arguments')
+        .post(controller.postArgument)
+        .get(controller.getArguments)
 };
