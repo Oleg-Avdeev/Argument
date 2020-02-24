@@ -6,7 +6,7 @@ echo "Branch: $1"
 echo "Changing directory to /home/$1"
 cd "/home/$1"
 
-echo "Checking for new commits:"
+echo "Trying to reset git repo"
 if git reset --hard ; then
     git pull -f
     
@@ -14,5 +14,5 @@ if git reset --hard ; then
     echo "Killing running server (If exists)"
     if pgrep "$1"; then pkill "$1"; fi
     echo "Restarting server"
-    nohup node "$1/server" > "../$1.log" 2>&1 &
+    nohup node "$1/server" > "$1.log" 2>&1 &
 fi
