@@ -1,5 +1,5 @@
 #!/bin/bash
-# $1 — branch name
+pwd
 echo "Script: $0"
 echo "Branch: $1"
 
