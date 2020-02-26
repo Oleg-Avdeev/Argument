@@ -39,7 +39,7 @@ const server = http.createServer((req, res) => {
     else {
         const getDirs = p => readdirSync(p).filter(f => statSync(join(p, f)).isDirectory())
         
-        const path = '/Users';
+        const path = '/home';
         const dirs = getDirs(path);
         var response = "";
         
