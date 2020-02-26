@@ -10,7 +10,7 @@ if git log -1 ; then
     git status -uno
 
     processes=$(ps -ef | grep -o "$2" | wc -l)
-    if ["&processes" -gt "4"] then
+    if [ $processes -gt "4" ]; then
         echo "<font size="3" color="green">Server $2 is active and running</font>"
     fi
     
