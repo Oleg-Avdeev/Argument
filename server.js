@@ -49,7 +49,8 @@ const server = http.createServer((req, res) => {
             console.log(`Checking server ${server}`);
             const command = `sh get-server-state.sh ${path} ${server}`;
             const result = execSync(command);
-            response += `\n --- ${dirs[i]} --- \n` + result;
+
+            response += `<div>\n --- ${dirs[i]} --- \n` + result + "</div>";
         }
 
         res.end(response);
