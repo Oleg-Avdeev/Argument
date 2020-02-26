@@ -14,7 +14,8 @@ if git log -1 ; then
         echo "Server $1 is active and running"
     fi
     
-    cat "../$2.log"
+    # if cat "../$2.log" ; then
+    # fi
 else
     echo "Not a server!"
 fi
