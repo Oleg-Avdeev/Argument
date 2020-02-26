@@ -10,7 +10,8 @@ if git log -1 ; then
     git remote update
     git status -uno
 
-    if pgrep "$1" ; then
+    a = ps -ef | grep -o "$1" | wc -l;
+    if &a > 1 ; then
         echo "Server $1 is active and running"
     fi
     
