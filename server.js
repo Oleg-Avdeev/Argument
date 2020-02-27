@@ -61,8 +61,9 @@ const server = http.createServer((req, res) => {
             }
             response += "</div>"
         }
-
-        res.end(response);
+        
+        var document = `<html><head><title>[Mercury] servers status</title><link href="https://fonts.googleapis.com/css?family=Fira+Mono&amp;display=swap" rel="stylesheet"></head><body>${response}</body></html>`
+        res.end(document);
     } 
 });
 server.listen(9000);
