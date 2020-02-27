@@ -10,7 +10,7 @@ require('./api/desks/models/model');
 require('./api/modules/models/model');
 require('./api/users/models/model');
 
-// mongoose instance connection url connection
+// mongoose instance connection url connection!
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/argumentdb'); 
 
