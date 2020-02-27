@@ -48,7 +48,7 @@ const server = http.createServer((req, res) => {
             const server = dirs[i];
             console.log(`Checking server ${server}`);
             const command = `sh /home/github-listener/get-server-state.sh ${path} ${server}`;
-            response += "<div style=\"word-wrap: break-word; white-space: pre-wrap; margin-left: 25%; margin-right: 25%; font-family: Fira-Mono;\">"
+            response += "<div style=\"word-wrap: break-word; white-space: pre-wrap; margin-left: 25%; margin-right: 25%; font-family: \'Fira Mono\'; font-size: 12px; padding: 15px;\">"
             response += `\n --- ${dirs[i]} --- \n`;
             try
             {
@@ -62,7 +62,8 @@ const server = http.createServer((req, res) => {
             response += "</div>"
         }
         
-        var document = `<html><head><title>[Mercury] servers status</title><link href="https://fonts.googleapis.com/css?family=Fira+Mono&amp;display=swap" rel="stylesheet"></head><body>${response}</body></html>`
+	var style = "<style>div {  border-top-style: dotted;  border-right-style: solid;  border-bottom-style: dotted;  border-left-style: solid; border-radius: 15px; margin-bottom: 15px;}</style>"
+        var document = `<html><head><title>[Mercury] servers status</title><link href="https://fonts.googleapis.com/css?family=Fira+Mono&amp;display=swap" rel="stylesheet">${style}</head><body>${response}</body></html>`
         res.end(document);
     } 
 });
