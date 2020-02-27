@@ -48,7 +48,7 @@ const server = http.createServer((req, res) => {
             const server = dirs[i];
             console.log(`Checking server ${server}`);
             const command = `sh /home/github-listener/get-server-state.sh ${path} ${server}`;
-            response += "<div style=\"word-wrap: break-word; white-space: pre-wrap; margin-left: 25%;\">"
+            response += "<div style=\"word-wrap: break-word; white-space: pre-wrap; margin-left: 25%; font-face: Fira-Mono;\">"
             response += `\n --- ${dirs[i]} --- \n`;
             try
             {
