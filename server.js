@@ -13,7 +13,7 @@ const server = http.createServer((req, res) => {
 
                 console.log("Incoming webhook detected. Parsing");
                 const branch = result["ref"].split("/").pop();
-                const command = 'sh refresh-repo.sh ' + branch;
+                const command = 'sh /home/github-listener/refresh-repo.sh ' + branch;
 
                 const child = exec(command);
 
@@ -47,8 +47,8 @@ const server = http.createServer((req, res) => {
         {
             const server = dirs[i];
             console.log(`Checking server ${server}`);
-            const command = `sh get-server-state.sh ${path} ${server}`;
-            const result = execSync(command);
+            const command = `sh /home/github-listener/get-server-state.sh ${path} ${server}`;
+            const result = execSync(command, {cwd: path});
 
             response += `\n --- ${dirs[i]} --- \n` + result;
         }
