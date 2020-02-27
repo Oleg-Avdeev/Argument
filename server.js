@@ -48,9 +48,16 @@ const server = http.createServer((req, res) => {
             const server = dirs[i];
             console.log(`Checking server ${server}`);
             const command = `sh /home/github-listener/get-server-state.sh ${path} ${server}`;
-            const result = execSync(command, {cwd: path});
-
-            response += `\n --- ${dirs[i]} --- \n` + result;
+            response += `\n --- ${dirs[i]} --- \n`;
+            try
+            {
+                const result = execSync(command, {cwd: path});
+                response += result;
+            }
+            catch (exception)
+            {
+                response += exception;
+            }
         }
 
         res.end(response);
