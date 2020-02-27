@@ -6,7 +6,7 @@ echo "Branch: $2"
 cd "$1/$2"
 
 if git log -1 ; then
-    git remote update
+    git remote update > /dev/null 2>&1
     git status -uno
 
     processes=$(ps -ef | grep -o "$2" | wc -l)

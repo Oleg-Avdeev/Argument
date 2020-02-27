@@ -14,5 +14,5 @@ if git reset --hard ; then
     echo "Killing running server (If exists)"
     if pgrep "$1"; then pkill "$1"; fi
     echo "Restarting server"
-    nohup node "$1/server" > "$1.log" 2>&1 &
+    nohup node "$1/server" > "logs/$1.log" 2>&1 &
 fi
