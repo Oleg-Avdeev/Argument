@@ -18,6 +18,7 @@ exports.showServerStatus = function (res) {
         try {
             const result = execSync(command, { cwd: path });
             response += result;
+            response += getButtonsHTML(server);
         }
         catch (exception) {
             response += exception;
@@ -36,11 +37,27 @@ exports.showServerStatus = function (res) {
         </style>
     </head>
     <body>${response}</body>
+    <script>
+        function runServer(server)  {
+            fetch("http://172.105.102.5:9000?func=run&server="+server);
+        }
+    </script>
     </html>`
     res.end(document);
 }
 
-function getButtonsHTML() 
-{
-    return `<button onclick="myFunction()">Click me</button>>Start server</button>`;
+exports.runServer = function (server) {
+    const path = '/home'
+    const command = `sh /home/github-listener/start-server.sh ${path} ${server}`;
+
+    try {
+        const result = execSync(command);
+    }
+    catch (exception) {
+        console.log(exception);
+    }
+}
+
+function getButtonsHTML(server) {
+    return `<button onclick="runServer(${server})">Run</button>`;
 }

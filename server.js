@@ -1,4 +1,5 @@
 const http = require('http');
+const url = require('url');
 
 const { parse } = require('querystring');
 const panel = require('./modules/status-panel');
@@ -12,7 +13,11 @@ const server = http.createServer((req, res) => {
         });
     }
     else {
-        panel.showServerStatus(res);
+        var query = url.parse(req.url, true).query;
+
+        if (isEmpty(query)) panel.showServerStatus(res);
+        else if (query["func"] === "run")
+            panel.runServer(query["server"]);
     } 
 });
 server.listen(9000);
@@ -36,3 +41,8 @@ function collectRequestData(request, callback) {
         callback(null);
     }
 }
+
+function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+  }
+  
