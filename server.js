@@ -1,70 +1,18 @@
 const http = require('http');
 
 const { parse } = require('querystring');
-const { exec, execSync } = require('child_process');
-const { readdirSync, statSync } = require('fs');
-const { join } = require('path');
+const panel = require('./modules/status-panel');
+const github = require('./modules/github-handler');
+
 
 const server = http.createServer((req, res) => {
     if (req.method === 'POST') {
         collectRequestData(req, result => {
-
-            if (result !== null) {
-
-                console.log("Incoming webhook detected. Parsing");
-                const branch = result["ref"].split("/").pop();
-                const command = 'sh /home/github-listener/refresh-repo.sh ' + branch;
-
-                const child = exec(command);
-
-                child.on('exit', code => {
-                    res.end(`Exit code is: ${code}`);
-                });
-
-                child.stdout.on('data', (data) => {
-                    console.log(data);
-                });
-
-                child.stderr.on('data', (data) => {
-                    console.log(data);
-                });
-            }
-            else {
-                console.log("Parsing failed! Something is wrong with either github, json, or more probably, oleg\'s code");
-                res.end("Not ok. Parsing failed!");
-            }
-
+            github.parseWebhook(result, res);
         });
     }
     else {
-        const getDirs = p => readdirSync(p).filter(f => statSync(join(p, f)).isDirectory())
-        
-        const path = '/home';
-        const dirs = getDirs(path);
-        var response = "";
-        
-        for (var i = 0; i < dirs.length; i++)
-        {
-            const server = dirs[i];
-            console.log(`Checking server ${server}`);
-            const command = `sh /home/github-listener/get-server-state.sh ${path} ${server}`;
-            response += "<div style=\"word-wrap: break-word; white-space: pre-wrap; margin-left: 25%; margin-right: 25%; font-family: \'Fira Mono\'; font-size: 12px; padding: 15px;\">"
-            response += `\n --- ${dirs[i]} --- \n`;
-            try
-            {
-                const result = execSync(command, {cwd: path});
-                response += result;
-            }
-            catch (exception)
-            {
-                response += exception;
-            }
-            response += "</div>"
-        }
-        
-	var style = "<style>div {  border-top-style: dotted;  border-right-style: solid;  border-bottom-style: dotted;  border-left-style: solid; border-radius: 15px; margin-bottom: 15px;}</style>"
-        var document = `<html><head><title>[Mercury] servers status</title><link href="https://fonts.googleapis.com/css?family=Fira+Mono&amp;display=swap" rel="stylesheet">${style}</head><body>${response}</body></html>`
-        res.end(document);
+        panel.showServerStatus(res);
     } 
 });
 server.listen(9000);
